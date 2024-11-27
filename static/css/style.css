@@ -1,0 +1,136 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* Styling the buttons */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-signout {
+    background-color: #007bff; /* Blue color for sign-out button */
+    color: white;
+}
+
+.btn-signout:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.btn-search {
+    background-color: #28a745; /* Green color for search button */
+    color: white;
+}
+
+.btn-search:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Search form styling */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between input and button */
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 450px; /* Adjust input width as needed */
+}
+
+/* Header container for desktop view */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+    gap: 10px;
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the left */
+        gap: 15px; /* Add spacing between stacked items */
+    }
+
+    .search-input {
+        width: 100%; /* Make the input take full width */
+    }
+}
+
+/* Weather Map */
+#map {
+    margin: 20px auto;
+    width: 100%;
+    height: 400px;
+    border: 2px solid #ddd;
+}
+
+/* 5 day predictions */
+/* Container for the forecast grid */
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
+    gap: 15px; /* Spacing between items */
+    margin-top: 20px;
+}
+
+/* Individual forecast items */
+.forecast-item {
+    background-color: #adcedcb3; /* Light background */
+    border: 1px solid #ddd; /* Border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Inner spacing */
+    text-align: center; /* Center-align text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Date/Time styling */
+.forecast-item p {
+    margin: 5px 0; /* Space between lines */
+}
+
+/* Weather icon */
+.forecast-item img {
+    margin-top: 10px; /* Space above the icon */
+    width: 50px; /* Icon size */
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .forecast-grid {
+        grid-template-columns: 1fr; /* Single column on smaller devices */
+    }
+}
+
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    background: #007bff;
+    color: #fff;
+}
+
+
+

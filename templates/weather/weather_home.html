@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; }
+    </style>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <div class="header-container">
+        <!-- Search Form -->
+        <form method="POST" class="search-form">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Enter city name" class="search-input">
+            <button type="submit" class="btn btn-search">Get Weather</button>
+        </form>
+
+        <!-- Sign Out Button -->
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-signout">Sign Out</button>
+        </form>
+    </div>
+
+
+    <!-- Current Weather -->
+    {% if weather_data %}
+        <div class="current-weather">
+            {% comment %} <h2>Current Weather in {{ weather_data.city.name }}, {{ weather_data.city.country }}</h2>
+            <p><strong>{{ weather_data.list.0.main.temp }}°C</strong> - {{ weather_data.list.0.weather.0.description }}</p>
+            <img src="https://openweathermap.org/img/wn/{{  weather_data.list.0.weather.0.icon }}@2x.png" alt="Weather icon"> {% endcomment %}
+            <div id="map"></div>
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+            <script>
+                var map = L.map('map').setView([{{ weather_data.city.coord.lat }}, {{ weather_data.city.coord.lon }}], 13);
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                }).addTo(map);
+
+                // Popup content with styled background
+                var popupContent = `
+                    <div style="
+                        background-color: rgba(173, 206, 220, 0.5); /* Light blue background */
+                        border: 1px solid #ddd; /* Light gray border */
+                        border-radius: 8px; /* Rounded corners */
+                        padding: 10px; /* Add spacing inside the box */
+                        text-align: center; /* Center-align content */
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+                    ">
+                        <strong>City:</strong> {{ weather_data.city.name }} <br>
+                        <strong>Weather:</strong> {{ weather_data.list.0.main.temp }}°C, {{ weather_data.list.0.weather.0.description }} <br>
+                        <img 
+                            src="https://openweathermap.org/img/wn/{{ weather_data.list.0.weather.0.icon }}@2x.png" 
+                            alt="Weather icon" 
+                            width="50"
+                            style="margin-top: 10px;"
+                        >
+                    </div>
+                `;
+
+
+                // Add a single marker with the popup content
+                L.marker([{{ weather_data.city.coord.lat }}, {{ weather_data.city.coord.lon }}])
+                    .addTo(map)
+                    .bindPopup(popupContent)
+                    .openPopup();
+            </script>
+        </div>
+    {% endif %} 
+
+    <!-- 5-Day Forecast -->
+    {% if forecast_data %}
+        <div class="forecast">
+            <h2>5-Day Forecast</h2>
+            <div class="forecast-grid">
+                {% for forecast in forecast_data %}
+                    <div class="forecast-item">
+                        <p><strong>Date & Time:</strong> <span class="forecast-time" data-utc="{{ forecast.datetime }}"></span></p>
+                        {% comment %} <p><strong>{{ forecast.datetime }}</strong></p> {% endcomment %}
+                        <p>{{ forecast.temperature }}°C - {{ forecast.description }}</p>
+                        <img src="https://openweathermap.org/img/wn/{{ forecast.icon }}@2x.png" alt="Weather icon">
+                    </div>
+                {% endfor %}
+                <script>
+                    // Convert UTC time to local time based on the timezone offset
+                    function convertToLocalTime(utcTime, offset) {
+                        const utcDate = new Date(utcTime); // Create Date object from UTC time
+                        const localDate = new Date(utcDate.getTime() + (offset * 1000)); // Apply timezone offset (in seconds)
+                        return localDate.toLocaleString(); // Return formatted local time
+                    }
+
+                    // Get timezone offset from the server response
+                    const timezoneOffset = {{ weather_data.city.timezone }}; // Offset in seconds from UTC
+
+                    // Loop through each forecast item and convert the time
+                    document.querySelectorAll('.forecast-time').forEach(function (element) {
+                        const utcTime = element.getAttribute('data-utc'); // Get the UTC time from the data-attribute
+                        const localTime = convertToLocalTime(utcTime, timezoneOffset); // Convert to local time
+                        element.innerHTML = localTime; // Set the converted local time in the element
+                    });
+                </script>
+            </div>
+        </div>
+    {% endif %}
+    
+    {% else %}
+        <p>You are not logged in. <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a></p>
+    {% endif %}
+</body>
+</html>

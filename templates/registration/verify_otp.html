@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/signup_style.css' %}">
+</head>
+<body>
+    <form method="POST" action="{% url 'verify_otp' %}">
+        {% csrf_token %}
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="password" value="{{ password }}">
+        <!-- OTP input field -->
+        <label for="otp">Enter OTP:</label>
+        <input type="text" name="otp" required>
+        
+        {% if error %}
+        <p style="color:red;">{{ error }}</p>
+        {% endif %}
+        
+        <button type="submit">Verify OTP</button>
+    </form>
+
+    <script>
+        // You can add any JavaScript here if necessary
+    </script>
+</body>
+</html>
