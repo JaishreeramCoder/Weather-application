@@ -11,6 +11,7 @@ pip install -r requirements.txt
 
 # Step 2: Apply database migrations
 echo "Applying database migrations..."
+python manage.py makemigrations
 python manage.py migrate
 
 # Step 3: Collect static files
