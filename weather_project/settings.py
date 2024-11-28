@@ -74,21 +74,22 @@ WSGI_APPLICATION = "weather_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 # Load environment variables from a .env file (optional but recommended)
 load_dotenv()
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),  # Database name
-        "USER": os.getenv("DB_USER"),  # Database username
-        "PASSWORD": os.getenv("DB_PASSWORD"),  # Database password
-        "HOST": os.getenv("DB_HOST"),  # Database host (provided by Render)
-        "PORT": os.getenv("DB_PORT", "5432"),  # Default PostgreSQL port
-    }
-}
+DATABASES={ "default":dj_database_url.parse(os.environ.get("DATABASE_URL"))}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("DB_NAME"),  # Database name
+#         "USER": os.getenv("DB_USER"),  # Database username
+#         "PASSWORD": os.getenv("DB_PASSWORD"),  # Database password
+#         "HOST": os.getenv("DB_HOST"),  # Database host (provided by Render)
+#         "PORT": os.getenv("DB_PORT", "5432"),  # Default PostgreSQL port
+#     }
+# }
 
 
 # Password validation
