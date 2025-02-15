@@ -18,7 +18,6 @@ This is a Django-based Weather Application that provides real-time weather infor
 - **Map**: OpenStreetMaps
 - **Frontend**: HTML, CSS, JavaScript
 - **Hosting**: Render
-- **Version Control**: GitHub
 
 ## 🚀 Live Demo
 
